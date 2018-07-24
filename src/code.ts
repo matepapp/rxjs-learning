@@ -1,13 +1,19 @@
-import { from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subject, interval, Observer } from 'rxjs';
+import { skipUntil } from 'rxjs/operators';
 
-from([
-    { first: 'Gary', last: 'Simon', age: '34'},
-    { first: 'Jane', last: 'Simon', age: '34'},
-    { first: 'John', last: 'Simon', age: '34'},
-])
-    .pipe(map(data => data.first))
-    .subscribe(next => addItem(next));
+let observable1 = Observable.create((observer: Observer<any>) => {
+    var i = 1;
+    setInterval(() => observer.next(i++), 1000);
+}) 
+
+let observable2 = new Subject();
+
+setTimeout(() => {
+    observable2.next('Hey!');
+}, 3000);
+
+let newObs: Observable<any> = observable1.pipe(skipUntil(observable2));
+newObs.subscribe(data => addItem(data));
 
 function addItem(value: any) {
     var node = document.createElement("li");

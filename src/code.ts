@@ -1,11 +1,13 @@
-import { Observable, Observer, pipe } from 'rxjs';
+import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-Observable.create((observer: Observer<any>) => {
-    observer.next('Hey guys!');
-})
-    .pipe(map((next: string) => next.toUpperCase()))
-    .subscribe((data: any) => addItem(data));
+from([
+    { first: 'Gary', last: 'Simon', age: '34'},
+    { first: 'Jane', last: 'Simon', age: '34'},
+    { first: 'John', last: 'Simon', age: '34'},
+])
+    .pipe(map(data => data.first))
+    .subscribe(next => addItem(next));
 
 function addItem(value: any) {
     var node = document.createElement("li");

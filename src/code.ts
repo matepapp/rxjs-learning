@@ -1,21 +1,8 @@
-import { Observable, Observer } from 'rxjs';
+import { fromEvent, Observable, Observer } from 'rxjs';
 
-let observable: Observable<any> = Observable.create((observer: Observer<any>) => {
-    observer.next('Hey guys!');
-    observer.next('How are you?');
-    setInterval(() => observer.next("I am good."), 2000);
-});
+let observable = fromEvent(document, 'mousemove');
 
-let observer = observable.subscribe(
-    (next: any) => addItem(next),
-    (error: any) => addItem(error),
-    () => addItem('Completed!')
-);
-
-let observer2 = observable.subscribe(next => addItem(next));
-observer.add(observer2);
-
-setTimeout(() => observer.unsubscribe(), 6001);
+setTimeout(() => observable.subscribe(event => addItem(event)), 2000);
 
 function addItem(value: any) {
     var node = document.createElement("li");

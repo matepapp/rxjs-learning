@@ -1,19 +1,11 @@
-import { AsyncSubject } from 'rxjs';
+import { Observable, Observer, pipe } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-let subject = new AsyncSubject();
-
-subject.subscribe(
-    data => addItem('Observer 1: ' + data),
-    () => addItem('Observer 1 Completed')
-);
-
-let i = 1;
-setInterval(() => subject.next(i++), 100);
-
-setTimeout(() => {
-    subject.subscribe(data => addItem('Observer 2: ' + data))
-    subject.complete();
-}, 500);
+Observable.create((observer: Observer<any>) => {
+    observer.next('Hey guys!');
+})
+    .pipe(map((next: string) => next.toUpperCase()))
+    .subscribe((data: any) => addItem(data));
 
 function addItem(value: any) {
     var node = document.createElement("li");

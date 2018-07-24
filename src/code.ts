@@ -1,17 +1,21 @@
 import { Observable, Observer } from 'rxjs';
 
-let observable = Observable.create((observer: Observer<any>) => {
+let observable: Observable<any> = Observable.create((observer: Observer<any>) => {
     observer.next('Hey guys!');
     observer.next('How are you?');
-    observer.complete()
-    observer.next('This item will not send.');
+    setInterval(() => observer.next("I am good."), 2000);
 });
 
-observable.subscribe(
+let observer = observable.subscribe(
     (next: any) => addItem(next),
     (error: any) => addItem(error),
     () => addItem('Completed!')
 );
+
+let observer2 = observable.subscribe(next => addItem(next));
+observer.add(observer2);
+
+setTimeout(() => observer.unsubscribe(), 6001);
 
 function addItem(value: any) {
     var node = document.createElement("li");

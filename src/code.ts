@@ -1,17 +1,19 @@
-import { ReplaySubject } from 'rxjs';
+import { AsyncSubject } from 'rxjs';
 
-let subject = new ReplaySubject(30, 500);
+let subject = new AsyncSubject();
 
 subject.subscribe(
     data => addItem('Observer 1: ' + data),
-    error => addItem(error),
     () => addItem('Observer 1 Completed')
 );
 
 let i = 1;
-let int = setInterval(() => subject.next(i++), 100);
+setInterval(() => subject.next(i++), 100);
 
-setTimeout(() => subject.subscribe(data => addItem('Observer 2: ' + data)), 500);
+setTimeout(() => {
+    subject.subscribe(data => addItem('Observer 2: ' + data))
+    subject.complete();
+}, 500);
 
 function addItem(value: any) {
     var node = document.createElement("li");

@@ -1,2 +1,2 @@
 # RxJS Tutorial
-RxJS course at Coursetro
+RxJS course at Coursetro.
